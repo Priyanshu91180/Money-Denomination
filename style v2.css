@@ -1,0 +1,201 @@
+/* Import Google Font - Poppins */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
+*{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Poppins', sans-serif;
+}
+body{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 0 10px;
+  background-image: linear-gradient(to right, #00b4db, #0083b0);
+    min-width: 1024px; /* Ensures desktop width */
+    overflow-x: auto;  /* Prevents mobile scaling */
+
+
+
+}
+::selection{
+  color: #fff;
+  background: #675AFE;
+}
+.wrapper{
+  width: 500px;
+  padding: 30px;
+  border-radius: 7px;
+  background: #fff;
+  box-shadow: 7px 7px 20px rgba(0, 0, 0, 0.05);
+}
+.wrapper header{
+  font-size: 28px;
+  font-weight: 500;
+  text-align: center;
+}
+.wrapper form{
+  margin: 40px 0 20px 0;
+}
+form :where(input, select, button){
+  width: 100%;
+  outline: none;
+  border-radius: 5px;
+  border: none;
+}
+form p{
+  font-size: 18px;
+  margin-bottom: 5px;
+}
+form input{
+  height: 50px;
+  font-size: 17px;
+  padding: 0 15px;
+  border: 1px solid #999;
+}
+form input:focus{
+  padding: 0 14px;
+  border: 2px solid #0083b0;
+}
+form .drop-list{
+  display: flex;
+  margin-top: 20px;
+  align-items: center;
+  justify-content: space-between;
+}
+.drop-list .select-box{
+  display: flex;
+  width: 175px;
+  height: 45px;
+  align-items: center;
+  border-radius: 5px;
+  justify-content: center;
+  border: 1px solid #999;
+}
+.select-box img{
+  max-width: 21px;
+}
+.select-box select{
+  width: auto;
+  font-size: 20px;
+  background: none;
+  margin: 0 -5px 0 5px;
+}
+.select-box select::-webkit-scrollbar{
+  width: 8px;
+}
+.select-box select::-webkit-scrollbar-track{
+  background: #fff;
+}
+.select-box select::-webkit-scrollbar-thumb{
+  background: #888;
+  border-radius: 8px;
+  border-right: 2px solid #ffffff;
+}
+.drop-list .icon{
+  cursor: pointer;
+  margin-top: 30px;
+  font-size: 22px;
+}
+form .exchange-rate{
+  border: 1px dotted gray;
+  border-radius: 5px;
+  padding: 7px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 19px;
+  margin: 20px 0 30px;
+}
+form button{
+  height: 52px;
+  color: #fff;
+  font-size: 17px;
+  cursor: pointer;
+  background: #00b4db;
+  transition: all 0.5s;
+}
+form button:hover{
+  background: #049bce;
+
+}
+
+
+
+.footer .footer-text{
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 400;
+  color: #024359;
+  transition: all 0.5s;
+}
+.footer .footer-text:hover{
+  color: #035c7a;
+}
+
+@media (max-width: 700px){
+  
+.wrapper{
+  width: 370px;
+}
+
+
+.drop-list .select-box{
+  width: 115px;
+  height: 45px;
+}
+
+
+}
+ .creator-name {
+   font-family: 'Pacifico',
+     cursive;
+   font-size: 500px;
+   color: Black;
+   background-image: linear-gradient(135deg, #FF0000, #000000, #808080, #0000FF);
+   -webkit-background-clip: text;
+   -webkit-text-fill-color: transparent;
+   text-transform: uppercase;
+   display: inline-block;
+   letter-spacing: 2px;
+   border: 2px solid black;
+   padding: 5px;
+
+   margin-bottom: 10px;
+ }
+ body {
+    min-width: 1024px; /* Ensures desktop width */
+    overflow-x: auto;  /* Prevents mobile scaling */
+}
+ /* Position the icon in the top-right corner */
+ .icon-container {
+   position: absolute;
+   top: 0%;
+   right: 0%;
+ }
+
+ /* Common icon styles */
+ .icon-link {
+   display: inline-block;
+   text-decoration: none;
+   transition: transform 0.2s ease-in-out;
+ }
+
+ .icon-img {
+   width: 100px;
+   height: 100px;
+   border-radius: 20px;
+   box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.5);
+   transition: all 0.3s ease-in-out;
+ }
+
+ /* Hover effect */
+ .icon-link:hover {
+   transform: scale(1.1);
+ }
+
+ .icon-img:hover {
+   box-shadow: 0px 6px 10px rgba(0, 0, 0, 0.3);
+   filter: brightness(1.2);
+ }

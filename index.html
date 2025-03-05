@@ -1,0 +1,978 @@
+<!doctype html>
+<html>
+<head>
+    
+  <div class="icon-container">
+  <a id="currency-icon-link" href="Currency-converter v1.html" class="icon-link">
+    <img id="currency-icon-img" src="Currency converter icon v1.png" alt="Currency Converter" class="icon-img">
+  </a>
+</div>
+<link rel="manifest" href="manifest.json">
+<script>
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('/sw.js')
+    .then((reg) => console.log("Service Worker Registered", reg))
+    .catch((err) => console.log("Service Worker Registration Failed", err));
+}
+</script>
+    <title>Money Denomination</title>
+<link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet"> <!-- Handwriting Font -->
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, san-serif;
+            transition: background 1.0s ease-in-out;
+        }
+        /* Background Styles */
+        body.black-style {
+            background: black;
+            backdrop-filter: blur(10px);
+        }
+        body.white1-style {
+            background: white;
+            backdrop-filter: blur(10px);
+        }
+
+        /* Theme Styles for UI (Popup Windows) */
+        .popup.colorful-gradient-theme {
+            background: linear-gradient(135deg, #ff6b6b, #ffcc5c, #48c6ef);
+            color: white;
+        }
+
+        .popup.white-theme { background-color: white; color: black; }
+        .popup.dark-theme { background-color: #404040; color: white; }
+        .popup.dracula-theme { background-color: #181818; color: #50fa7b; }
+
+        /* Three-dot menu button */
+        #menu-button {
+    position: fixed;
+    top: 11%;
+    left: 9.7%;
+    transform: translate(-50%, -50%);
+    font-size: 60px;
+    cursor: pointer;
+    padding: 10px;
+    background: rgba(0, 0, 0, 0.7);
+    color: white;
+    border-radius: 5px;
+    user-select: none;
+    z-index: 1000;
+}
+        /* Pop-up UI (Settings & About) */
+        .popup {
+            position: fixed;
+            top: 130px;
+            left: 80px;
+            background: transparent; /* Default solid background */
+            padding: 80px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            z-index: 150;
+            display: none;
+            transition: background 0.3s ease-in-out;
+            width: 400px;
+        }
+
+        .popup button {
+            width: 100%;
+            padding: 20px;
+            margin: 5px 0;
+            border: none;
+            background: #ff6b6b;
+            color: white;
+            font-size: 28px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .popup button:hover {
+            background: #ff4757;
+        }
+
+        /* Settings UI */
+        .popup label {
+            display: block;
+            margin-top: 8px;
+            font-weight: bold;
+            font-size: 28px;
+        }
+
+        select {
+            width: 100%;
+            padding: 10px;
+            margin: 5px 0;
+            border-radius: 5px;
+            font-size: 28px;
+        }
+
+        /* About App - Beautiful Handwriting Text */
+        .creator-name {
+            font-family: 'Pacifico', 
+            cursive;
+            font-size: 500px;
+            color: Black;
+            background-image: linear-gradient(135deg, #FF0000, #000000, #808080, #0000FF);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-transform: uppercase;
+            display: inline-block;
+            letter-spacing: 2px;
+            border: 2px solid black;
+            padding: 3px;
+            
+            margin-bottom: 10px;
+        }
+
+        .version {
+            font-size: 28px;
+       translateX(-50%);
+            margin-bottom: 1px; /* Adjusted margin for spacing between version and close button */
+        }
+
+        /* Adjust the space between the Close button and Version text */
+        #close-about {
+            margin-bottom: 30px;
+        }
+        
+/* Position the icon in the top-right corner */
+.icon-container {
+  position: absolute;
+  top: 135px;
+  right: 0px;
+}
+
+/* Common icon styles */
+.icon-link {
+  display: inline-block;
+  text-decoration: none;
+  transition: transform 0.2s ease-in-out;
+}
+
+.icon-img {
+  width: 100px;
+  height: 100px;
+  border-radius: 20px;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.5);
+  transition: all 0.3s ease-in-out;
+}
+
+/* Hover effect */
+.icon-link:hover {
+  transform: scale(1.1);
+}
+
+.icon-img:hover {
+  box-shadow: 0px 6px 10px rgba(0, 0, 0, 0.3);
+  filter: brightness(1.2);
+}
+    </style>
+</head>
+<body class="colorful-gradient-style"> <!-- Default Background Style -->
+
+    <!-- Three-dot button -->
+       <div id="menu-button">&#8942;</div> 
+
+    <!-- Pop-up Menu -->
+    <div id="menu-popup" class="popup">
+        <button id="settings-btn">Settings</button>
+        <button id="about-btn">About App</button>
+        <!-- Add "Feedback" Option -->
+        <div class="menu">
+          <button id="feedbackBtn">Feedback</button>
+        </div>
+        <button id="WhatsNewbtn">What's New</button>
+            <!-- History Button -->
+    <button class="history-btn" onclick="openHistory()">Show History</button>
+        
+        <button id="exit-btn">Exit App</button>
+    </div>
+
+    <!-- Settings Popup -->
+    <div id="settings-popup" class="popup colorful-gradient-theme">
+        <h2>Settings</h2>
+
+        <label>Background Style:</label>
+        <select id="background-select">
+            <option value="colorful-gradient" selected>Colorful Gradient</option>
+           <option value="black">Black</option>
+           <option value="white1">White</option>
+           <option value="custom">Custom Color/Gradient</option>
+         <!-- Single option for both -->
+        <option value="animated">Animated Background</option>
+</select>
+
+<!-- Single Input Box (For Solid or Gradient Colors) -->
+<div id="custom-color-container" style="display: none; margin-top: 10px;">
+    <label for="custom-color;">Enter Hex Code(s):</label>
+    <input type="text" id="custom-color" placeholder="#123456 or #ff0000, #00ff00" 
+           style="width: 390px; height: 50px; font-size: 30px;">
+           <a href="Colours.png">
+Get HEX Code of Some Colours to Add in Custom Colour
+</a>
+</div>
+        <label>Theme:</label>
+        <select id="theme-select">
+            <option value="colorful-gradient" selected>Colorful Gradient</option>
+            <option value="white">White Theme</option>
+            <option value="dark">Dark Theme</option>
+            <option value="dracula">Dracula Theme</option>
+        </select>
+        
+    <!-- Currency Selection -->
+    <label>Select Currency:</label>
+    <select id="currency">
+        <option value="INR">&#8377; INR</option>
+  <script></script>      <option value="USD">&#36; USD</option>
+        <option value="EUR">&#8364; EUR</option>
+        <option value="GBP">&#163; GBP</option>
+    </select>
+    <label for="currency-version">Select Currency Converter:</label>
+<select id="currency-version" onchange="updateCurrencyIcon()">
+  <option value="v1">Currency Converter v1</option>
+  <option value="v2">Currency Converter v2</option>
+</select>
+    <button id="save-settings">Save</button>
+    
+    
+    </div>
+
+    <!-- About App Popup -->
+    <div id="about-popup" class="popup colorful-gradient-theme">
+        <h2 style="font-size: 40px; margin-bottom: 10px;">About The Web App</h2>
+        <p class="creator-name" style="font-size: 30px; margin-bottom: 10px;"> THIS WEB APP IS CREATED BY PRIYANSHU DUTTA</p>
+        <p style="font-size: 28px; margin-bottom: 10px;color: black;">This web app is designed to provide an efficient and seamless money denomination breakdown experience.Whether you're organizing your funds or learning about various denominations,this app helps you with clear,quick breakdowns.</p>
+  <!-- Version at the lower center -->
+        <p class="version">Version: <strong>1.3.0</strong></p>
+
+        <button id="close-about" style="padding: 16px 32px; font-size: 24px; background-color: #ff6b6b; color: white; border: none; border-radius: 5px; cursor: pointer; width: 100%; margin-top: 10px;">Close</button>
+    </div>
+
+    <script>
+    document.addEventListener("DOMContentLoaded", () => {
+  const bgStyleSelect = document.getElementById("background-style");
+  const customColorContainer = document.getElementById("custom-color-container");
+  const customColorInput = document.getElementById("custom-color");
+
+  // Retrieve saved settings from LocalStorage
+  const savedBg = localStorage.getItem("bgStyle");
+  const savedColor = localStorage.getItem("customColor");
+
+  if (savedBg) {
+    bgStyleSelect.value = savedBg;
+    if (savedBg === "custom") {
+      customColorContainer.style.display = "block"; // Show hex input field
+      if (savedColor) {
+        document.body.style.background = savedColor;
+        customColorInput.value = savedColor;
+      }
+    }
+  }
+
+  // Listen for background style change
+  bgStyleSelect.addEventListener("change", function() {
+    if (this.value === "custom") {
+      customColorContainer.style.display = "block"; // Show hex input field
+    } else {
+      customColorContainer.style.display = "none"; // Hide hex input field
+    }
+    localStorage.setItem("bgStyle", this.value);
+  });
+
+  // Listen for color input change
+  customColorInput.addEventListener("input", function() {
+    const color = this.value.trim();
+    if (/^#[0-9A-Fa-f]{6}$/.test(color)) {
+      document.body.style.background = color;
+      localStorage.setItem("customColor", color);
+    }
+  });
+});
+    
+    
+    let menuButton = document.getElementById('menu-button');
+        let menuPopup = document.getElementById('menu-popup');
+        let settingsPopup = document.getElementById('settings-popup');
+        let aboutPopup = document.getElementById('about-popup');
+
+        // Load stored theme and background style on page load
+        window.onload = function() {
+            let savedBgStyle = localStorage.getItem('backgroundStyle');
+            let savedTheme = localStorage.getItem('theme');
+
+            if (savedBgStyle) {
+                document.body.classList.add(savedBgStyle);
+            }
+            if (savedTheme) {
+                let popups = document.querySelectorAll('.popup');
+                popups.forEach(popup => {
+                    popup.classList.add(savedTheme);
+                });
+            }
+        };
+
+        // Toggle Menu
+        menuButton.addEventListener('click', function() {
+            menuPopup.style.display = (menuPopup.style.display === 'block') ? 'none' : 'block';
+        });
+
+        // Open Settings
+        document.getElementById('settings-btn').addEventListener('click', function() {
+            menuPopup.style.display = 'none';
+            settingsPopup.style.display = 'block';
+        });
+
+        // Open About App
+        document.getElementById('about-btn').addEventListener('click', function() {
+            menuPopup.style.display = 'none';
+            aboutPopup.style.display = 'block';
+        });
+
+        // Close About App
+        document.getElementById('close-about').addEventListener('click', function() {
+            aboutPopup.style.display = 'none';
+        });
+
+        // Close popups when clicking outside
+        document.addEventListener('click', function(event) {
+            if (!menuPopup.contains(event.target) && event.target !== menuButton) {
+                menuPopup.style.display = 'none';
+            }
+            if (!settingsPopup.contains(event.target) && event.target !== document.getElementById('settings-btn')) {
+                settingsPopup.style.display = 'none';
+            }
+            if (!aboutPopup.contains(event.target) && event.target !== document.getElementById('about-btn')) {
+                aboutPopup.style.display = 'none';
+            }
+        });
+
+        // Save Settings
+        document.getElementById('save-settings').addEventListener('click', function() {
+            let bgChoice = document.getElementById('background-select').value;
+            let themeChoice = document.getElementById('theme-select').value;
+
+            // Update main app background
+            document.body.classList.remove('black-style','white1-style', 'colorful-gradient-style');
+            if (bgChoice === 'white1')
+            {
+               document.body.classList.add('white1-style');
+    }
+          else if(bgChoice === 'black') {
+                document.body.classList.add('black-style');
+            } else {
+                document.body.classList.add('colorful-gradient-style');
+            }
+
+            // Update UI theme
+            let popups = document.querySelectorAll('.popup');
+            popups.forEach(popup => {
+                popup.classList.remove('colorful-gradient-theme', 'white-theme', 'dark-theme', 'dracula-theme');
+                popup.classList.add(themeChoice + '-theme');
+            });
+
+            // Save settings to localStorage
+            localStorage.setItem('backgroundStyle', bgChoice);
+            localStorage.setItem('theme', themeChoice);
+
+            settingsPopup.style.display = 'none';
+        });
+
+        // Exit App (Only Works on Some Browsers)
+        document.getElementById('exit-btn').addEventListener('click', function() {
+            window.close();
+        });
+        
+    </script>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #ff9a9e, #fad0c4, #fbc2eb, #a1c4fd, #c2e9fb);
+            background-size: 400% 400%;
+            animation: gradientBG 10s ease infinite;
+            transform: scale(1.2);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .container {
+            text-align: center;
+            background: rgba(255, 255, 255, 0.8);
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+            max-width: 600px;
+            width: 100%;
+        }
+
+        h2 {
+            color: #333;
+            font-size: 2rem;
+            margin-bottom: 20px;
+        }
+
+        #amount {
+            width: 80%;
+            padding: 15px;
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            outline: none;
+        }
+
+        button {
+            padding: 15px 30px;
+            font-size: 1.5rem;
+            background-color: #4caf50;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        #result {
+            margin-top: 20px;
+            font-size: 1.5rem;
+            line-height: 1.8;
+            color: #333;
+            text-align: left;
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        li {
+            font-weight: bold;
+        }
+    </style>
+    <script>
+        function calculateDenominations() {
+            var amount = parseInt(document.getElementById("amount").value);
+            if (isNaN(amount) || amount <= 0) {
+                document.getElementById("result").innerHTML = "Please enter a valid positive amount.";
+                return;
+            }
+
+            var denominations = [2000, 500, 200, 100, 50, 20, 10, 5, 2, 1];
+            var numNotes = Array(10).fill(0);
+
+            for (var i = 0; i < 10; i++) {
+                if (amount >= denominations[i]) {
+                    numNotes[i] = Math.floor(amount / denominations[i]);
+                    amount %= denominations[i];
+                }
+            }
+
+            var resultText = "<h3>Denominations breakdown:</h3><ul>";
+            for (var i = 0; i < 10; i++) {
+                if (numNotes[i] > 0) {
+                    resultText += "<li>" + denominations[i] + " : " + numNotes[i] + "</li>";
+                }
+            }
+            resultText += "</ul>";
+
+            document.getElementById("result").innerHTML = resultText;
+        }
+    </script>
+    <!-- What's New Popup -->
+<div id="whatsnew-popup" class="popup colorful-gradient-theme">
+  <h2 style="font-size: 40px; margin-bottom: 10px;">What's New</h2>
+  <h3 style="font-size: 38px; margin-bottom: 20px; color: #808080;">Update v1.3.0</h3>
+  <ul style="font-size: 28px; margin-bottom: 20px;color:black;text-align:left;list-style-type: square">
+  <li>Added a feedback button in the three dots and a feedback ui to send feedback to the developer.
+</li>
+<li>Added working animated background in background style.
+</li>
+<li>Added working history button with history ui in the menu button.
+</li>
+<li>Fixed various bugs.
+</li>
+</ul>
+  
+  <button id="close-whatsnew" style="padding: 16px 32px; font-size: 24px; background-color: #ff6b6b; color: white; border: none; border-radius: 5px; cursor: pointer; width: 100%; margin-top: 10px;">Close</button>
+</div>
+<script>
+  let whatsNewPopup = document.getElementById('whatsnew-popup');
+
+// Open What's New UI
+document.getElementById('WhatsNewbtn').addEventListener('click', function() {
+  menuPopup.style.display = 'none';
+  whatsNewPopup.style.display = 'block';
+});
+
+// Close What's New UI
+document.getElementById('close-whatsnew').addEventListener('click', function() {
+  whatsNewPopup.style.display = 'none';
+});
+
+// Close popups when clicking outside
+document.addEventListener('click', function(event) {
+  if (!whatsNewPopup.contains(event.target) && event.target !== document.getElementById('WhatsNewbtn')) {
+    whatsNewPopup.style.display = 'none';
+  }
+});
+</script>
+</head>
+<body>
+    <div class="container">
+        <h2>Enter the amount in rupees:</h2>
+        <input type="number" id="amount" placeholder="Enter amount">
+        <button onclick="calculateDenominations()">Calculate</button>
+<button id="saveBtn">Save</button>
+<button id="loadBtn">Load</button>
+<input type="file" id="fileInput" style="display: none;">
+<button onclick="shareDenomination()">Share</button>
+
+        <div id="result"></div>
+    </div>
+
+<style>
+/* Feedback Modal Styles */
+.feedback-modal {
+    display: none;
+    position: fixed;
+    top: 9%; left: 10%;
+    width: 100%; height: 100%;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Increase Width & Height */
+.feedback-content {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    width: 120%;  /* Increased width */
+    height: 98%; /* Increased height */
+    position: relative;
+    box-shadow: 0px 4px 10px rgba(0,0,0,0.3);
+}
+
+/* Make the iframe bigger */
+.feedback-frame {
+    width: 100%;
+    height: 100%;
+    border: none;
+}
+
+/* Close button styling */
+    .close-btn {
+        position: absolute;
+        top: 10px; right: 20px;
+        font-size: 60px;
+        color: yellow;
+        cursor: pointer;
+    }
+</style>
+    <script>
+    document.getElementById("saveBtn").addEventListener("click", function () {
+    let now = new Date();
+
+    // Format the timestamp for India (DD-MM-YYYY_HH-MM-SS AM/PM)
+    let options = { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true };
+    let formattedDate = now.toLocaleString("en-IN", options).replace(/\//g, "-").replace(",", "").replace(/:/g, "-");
+
+    // Get the breakdown text
+    let breakdownDiv = document.getElementById("result");
+    let breakdownText = breakdownDiv.innerText.trim();
+
+    if (!breakdownText) {
+        alert("No denomination breakdown found!");
+        return;
+    }
+
+    // Full text with timestamp inside
+    let fullText = `Date: ${now.toLocaleString("en-IN", options)}\nDenominations Breakdown:\n${breakdownText}`;
+
+    // Create the text file and set filename with timestamp
+    let blob = new Blob([fullText], { type: "text/plain" });
+    let a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = `Denomination_Breakdown_${formattedDate}.txt`; // Filename with Indian format
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+});
+document.getElementById("loadBtn").addEventListener("click", function () {
+    let input = document.createElement("input");
+    input.type = "file";
+    input.accept = "text/plain";
+
+    input.addEventListener("change", function () {
+        let file = input.files[0];
+        if (!file) return;
+
+        let reader = new FileReader();
+        reader.onload = function (event) {
+            let content = event.target.result;
+            
+            // Extract the breakdown text (removing "Date:" part)
+            let breakdownIndex = content.indexOf("Denominations Breakdown:");
+            let breakdownText = breakdownIndex !== -1 ? content.substring(breakdownIndex + 23).trim() : content;
+
+            // Set the loaded text into the breakdown div
+            document.getElementById("result").innerText = breakdownText;
+        };
+
+        reader.readAsText(file);
+    });
+
+    input.click();
+});
+
+
+
+function calculateDenominations() {
+  var amount = parseInt(document.getElementById("amount").value);
+  var currency = document.getElementById("currency").value;
+
+  if (isNaN(amount) || amount <= 0) {
+    document.getElementById("result").innerHTML = "Please enter a valid positive amount.";
+    return;
+  }
+
+  // Define denominations and symbols for different currencies
+  var currencyData = {
+    INR: { symbol: "&#8377;", denominations: [2000, 500, 200, 100, 50, 20, 10, 5, 2, 1] },
+    USD: { symbol: "&#36;", denominations: [100, 50, 20, 10, 5, 2, 1] },
+    EUR: { symbol: "&#8364;", denominations: [500, 200, 100, 50, 20, 10, 5, 2, 1] },
+    GBP: { symbol: "&#163;", denominations: [50, 20, 10, 5, 2, 1] }
+  };
+
+  var selectedCurrency = currencyData[currency] || currencyData["INR"];
+  var symbol = selectedCurrency.symbol;
+  var denominations = selectedCurrency.denominations;
+  var numNotes = Array(denominations.length).fill(0);
+
+  // Calculate the number of notes/coins
+  for (var i = 0; i < denominations.length; i++) {
+    if (amount >= denominations[i]) {
+      numNotes[i] = Math.floor(amount / denominations[i]);
+      amount %= denominations[i];
+    }
+  }
+
+  // Generate the result text with currency symbols
+  var resultText = `<h3>Denominations Breakdown (${currency}):</h3><ul>`;
+  for (var i = 0; i < denominations.length; i++) {
+    if (numNotes[i] > 0) {
+      resultText += `<li>${symbol}${denominations[i]} : ${numNotes[i]}</li>`;
+    }
+  }
+  resultText += "</ul>";
+
+  document.getElementById("result").innerHTML = resultText;
+}
+        // Share denomination
+        function shareDenomination() {
+            let text = document.getElementById("result").innerText;
+            let shareText = `Money Denomination Breakdown:\n\n${text}`;
+            let encodedText = encodeURIComponent(shareText);
+            let whatsappURL = `https://wa.me/?text=${encodedText}`;
+            let emailURL = `mailto:?subject=Denomination Breakdown&body=${encodedText}`;
+
+            if (navigator.share) {
+                navigator.share({ text: shareText });
+            } else {
+                window.open(whatsappURL, "_blank");
+            }
+        }
+        
+        function updateCurrencyIcon() {
+  let version = document.getElementById("currency-version").value;
+  let iconLink = document.getElementById("currency-icon-link");
+  let iconImg = document.getElementById("currency-icon-img");
+
+  if (version === "v1") {
+    iconLink.href = "Currency-converter v1.html";
+    iconImg.src = "Currency converter icon v1.png";
+  } else {
+    iconLink.href = "Currency-converter v2.html";
+    iconImg.src = "Currency-converter icon v2.png";
+  }
+
+  // Save preference in localStorage
+  localStorage.setItem("currencyVersion", version);
+}
+
+// Load saved preference on page load
+window.onload = function() {
+  let savedVersion = localStorage.getItem("currencyVersion");
+  if (savedVersion) {
+    document.getElementById("currency-version").value = savedVersion;
+    updateCurrencyIcon();
+  }
+};
+
+
+const bgSelect = document.getElementById("background-select");
+
+function setBackground(style) {
+  let bgContainer = document.getElementById("bg-container");
+
+  // Remove existing background
+  if (bgContainer) {
+    bgContainer.remove();
+  }
+
+  if (style === "animated") {
+    // Create an iframe for the animation
+    bgContainer = document.createElement("iframe");
+    bgContainer.id = "bg-container";
+    bgContainer.src = "bg animation.html"; // Path to your animation file
+    bgContainer.style.position = "fixed";
+    bgContainer.style.top = "0";
+    bgContainer.style.left = "0";
+    bgContainer.style.width = "100%";
+    bgContainer.style.height = "100%";
+    bgContainer.style.border = "none";
+    bgContainer.style.zIndex = "-100";
+
+    document.body.prepend(bgContainer);
+  }
+
+  // Save background choice
+  localStorage.setItem("backgroundStyle", style);
+}
+
+// Load saved background style on page load
+const savedStyle = localStorage.getItem("backgroundStyle") || "default";
+bgSelect.value = savedStyle;
+setBackground(savedStyle);
+
+// Event listener for background change
+bgSelect.addEventListener("change", function() {
+  setBackground(this.value);
+});
+<!--JavaScript to Toggle Feedback Form-->
+    document.addEventListener("DOMContentLoaded", function () {
+        const feedbackBtn = document.getElementById("feedbackBtn");
+        const closeFeedback = document.getElementById("closeFeedback");
+        const feedbackContainer = document.getElementById("feedbackContainer");
+        const feedbackFrame = document.getElementById("feedbackFrame");
+
+        // Open feedback form
+        feedbackBtn.addEventListener("click", function () {
+            feedbackFrame.src = "feedback_form_email.html"; // Make sure this filename matches exactly
+            feedbackContainer.style.display = "flex";
+        });
+
+        // Close feedback form
+        closeFeedback.addEventListener("click", function () {
+            feedbackContainer.style.display = "none";
+            feedbackFrame.src = ""; // Unload the iframe to refresh form on reopen
+        });
+    });
+</script>
+<!-- Feedback Form (Hidden by Default)-->
+<div id="feedbackContainer" class="feedback-modal">
+  <div class="feedback-content">
+    <span class="close-btn" id="closeFeedback">&times;</span>
+    <iframe id="feedbackFrame" src="" class="feedback-frame"></iframe>
+  </div>
+</div>
+<style>
+  /* Glitch Effect */
+.glitch {
+    animation: glitch 0.3s infinite alternate;
+}
+
+@keyframes glitch {
+    0% { transform: skew(-5deg) rotate(-2deg); text-shadow: 3px 3px red; }
+    50% { transform: skew(5deg) rotate(2deg); text-shadow: -3px -3px blue; }
+    100% { transform: skew(-5deg) rotate(-2deg); text-shadow: 3px 3px green; }
+}
+
+/* Flip Mode */
+.flipped {
+    transform: rotate(180deg);
+}
+
+/* Neon Mode */
+.neon-mode {
+    background: black;
+    color: lime;
+    text-shadow: 0 0 5px lime, 0 0 10px lime;
+}
+
+/* Retro Mode */
+.retro-mode {
+    background: blue;
+    color: yellow;
+    font-family: "Courier New", monospace;
+}
+
+/* Rainbow Mode */
+.rainbow-mode {
+    animation: rainbow 1s infinite linear;
+}
+
+@keyframes rainbow {
+    0% { background: red; }
+    20% { background: orange; }
+    40% { background: yellow; }
+    60% { background: green; }
+    80% { background: blue; }
+    100% { background: purple; }
+}
+</style>
+
+
+    <style>
+        
+        .history-ui {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 90%;
+            max-width: 500px;
+            background: inherit; /* Matches other UI elements */
+            padding: 20px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            text-align: center;
+            z-index: 1000;
+        }
+        .history-list {
+            max-height: 300px;
+            overflow-y: auto;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 10px;
+            border-radius: 8px;
+            text-align: left;
+        }
+        .btn {
+            display: inline-block;
+            margin: 10px;
+            padding: 10px 15px;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        
+        .export-btn { background: green; color: white; }
+        .history-btn { background: blue; color: white; }
+    </style>
+
+
+
+    <!-- History UI -->
+    <div id="historyUI" class="history-ui">
+        <h2>Your History</h2>
+        <div id="historyList" class="history-list"></div>
+        <button class="btn export-btn" onclick="exportHistory()">Export</button>
+        <button class="btn close-btn" onclick="closeHistory()">X</button>
+    </div>
+
+    <script>
+        // Save actual breakdown from <div id="result"></div>
+        function saveBreakdownToHistory() {
+            let breakdown = document.getElementById("result").innerText.trim(); // Get text from #result
+            if (breakdown !== "") {
+                saveToHistory(breakdown);
+            }
+        }
+
+        // Save history to localStorage
+        function saveToHistory(result) {
+            let history = JSON.parse(localStorage.getItem("denominationHistory")) || [];
+            let timestamp = new Date();
+            let formattedTime = timestamp.toLocaleString("en-US", { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true });
+            let formattedDate = timestamp.toLocaleDateString();
+            
+            let entry = `${formattedDate} - ${formattedTime} ➝ ${result}`;
+            history.push(entry);
+
+            if (history.length > 30) history.shift(); // Keep last 30 records
+
+            localStorage.setItem("denominationHistory", JSON.stringify(history)); // Save to storage
+        }
+
+        // Open History UI
+        function openHistory() {
+            let history = JSON.parse(localStorage.getItem("denominationHistory")) || [];
+            let historyList = document.getElementById("historyList");
+
+            historyList.innerHTML = history.length
+                ? history.map(item => `<p>${item}</p>`).join("")
+                : "<p>No history available.</p>";
+
+            document.getElementById("historyUI").style.display = "block";
+        }
+
+        // Close History UI
+        function closeHistory() {
+            document.getElementById("historyUI").style.display = "none";
+        }
+
+        // Export History as a .txt file
+        function exportHistory() {
+            let history = JSON.parse(localStorage.getItem("denominationHistory")) || [];
+            if (history.length === 0) {
+                alert("No history to export.");
+                return;
+            }
+
+            let textContent = history.join("\n");
+            let blob = new Blob([textContent], { type: "text/plain" });
+            let a = document.createElement("a");
+            a.href = URL.createObjectURL(blob);
+            a.download = "Denomination_History.txt";
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+        }
+
+        // Auto-save breakdown after result updates
+        document.addEventListener("DOMContentLoaded", function () {
+            let observer = new MutationObserver(saveBreakdownToHistory);
+            observer.observe(document.getElementById("result"), { childList: true });
+        });
+        
+        let deferredPrompt;
+
+window.addEventListener("beforeinstallprompt", (event) => {
+  event.preventDefault();
+  deferredPrompt = event;
+  document.getElementById("install-button").style.display = "block";
+});
+
+document.getElementById("install-button").addEventListener("click", async () => {
+  if (deferredPrompt) {
+    deferredPrompt.prompt();
+    const choiceResult = await deferredPrompt.userChoice;
+    if (choiceResult.outcome === "accepted") {
+      console.log("User accepted the install prompt");
+    } else {
+      console.log("User dismissed the install prompt");
+    }
+    deferredPrompt = null;
+  }
+});window.addEventListener("appinstalled", () => {
+  document.getElementById("install-button").style.display = "none";
+});
+    </script>
+
+
+
+</body>
+</html>

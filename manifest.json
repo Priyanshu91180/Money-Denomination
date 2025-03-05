@@ -1,0 +1,16 @@
+{
+  "name": "Money Denomination",
+  "short_name": "Money Denomination",
+  "description": "This app is made by Priyanshu Dutta",
+  "start_url": "/index.html",
+  "display": "standalone",
+  "background_color": "#fff",
+  "theme_color": "#4CAF50",
+  "icons": [
+    {
+      "src": "icon-217x217.png",
+      "sizes": "217x217",
+      "type": "image/png"
+    }
+  ]
+}
