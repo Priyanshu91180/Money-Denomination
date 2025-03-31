@@ -1,16 +1,18 @@
 <!doctype html>
 <html>
 <head>
-    
   <div class="icon-container">
-  <a id="currency-icon-link" href="Currency-converter v1.html" class="icon-link">
-    <img id="currency-icon-img" src="Currency converter icon v1.png" alt="Currency Converter" class="icon-img">
+  <a id="currency-icon-link" href="currency-converter v1.html" class="icon-link">
+    <img id="currency-icon-img" src="currency converter icon v1.png" alt="Currency Converter" class="icon-img">
   </a>
 </div>
+   <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Gloria+Hallelujah&display=swap" rel="stylesheet">
 <link rel="manifest" href="manifest.json">
 <script>
 if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/sw.js')
+  navigator.serviceWorker.register('/service-worker.js')
     .then((reg) => console.log("Service Worker Registered", reg))
     .catch((err) => console.log("Service Worker Registration Failed", err));
 }
@@ -18,6 +20,55 @@ if ('serviceWorker' in navigator) {
     <title>Money Denomination</title>
 <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet"> <!-- Handwriting Font -->
     <style>
+   #whatsnew-popup {
+            font-family: 'Gloria Hallelujah',cursive;
+            position: fixed;
+            top: 160px;
+            left: 80px;
+            padding: 80px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            z-index: 150;
+            display: none;
+            width: 720px;
+            height: 1150px;
+            padding: 80px;
+            display: flex;
+            align: center;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        
+}
+
+#whatsnew-popup ul {
+    list-style-position: inside;
+    left: 80px;
+    width: 1500px;
+    max-width: 100%;
+    background: white;
+    box-shadow: 0.25rem 0.25rem 0.75rem rgba(0, 0, 0, 0.15);
+    padding: 0;
+    margin: 0;
+    border-radius: 10px;
+}
+
+#whatsnew-popup li {
+    padding: 0 0 0 1rem;
+}
+
+#whatsnew-popup li:not(:last-child) {
+    border-bottom: 1px solid lightblue;
+}
+
+#whatsnew-popup li:first-child {
+    margin-top: 100px;
+}
+
+#whatsnew-popup li:last-child {
+    margin-bottom: 100px;
+}
+    
         body {
             margin: 0;
             padding: 0;
@@ -64,7 +115,6 @@ if ('serviceWorker' in navigator) {
             position: fixed;
             top: 130px;
             left: 80px;
-            background: transparent; /* Default solid background */
             padding: 80px;
             border-radius: 10px;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
@@ -195,24 +245,105 @@ if ('serviceWorker' in navigator) {
         <h2>Settings</h2>
 
         <label>Background Style:</label>
-        <select id="background-select">
+        <select id="background-select" onchange="toggleCustomColor()">
             <option value="colorful-gradient" selected>Colorful Gradient</option>
+            <option value="colourful-gradient-v2" selected>Colorful Gradient V2</option>
            <option value="black">Black</option>
            <option value="white1">White</option>
-           <option value="custom">Custom Color/Gradient</option>
-         <!-- Single option for both -->
+           <option value="custom" onclick="toggleCustomColor()">Custom Color/Gradient</option>
         <option value="animated">Animated Background</option>
+        <option value="solarsystem">Solar System Background</option>
+        <option value="fireflies">Fireflies Background</option>
+        <option value="matrix">Matrix Rain Background</option>
+        <option value="physics-particles">Physics Particles Background</option>
 </select>
+    <style>
 
-<!-- Single Input Box (For Solid or Gradient Colors) -->
-<div id="custom-color-container" style="display: none; margin-top: 10px;">
-    <label for="custom-color;">Enter Hex Code(s):</label>
-    <input type="text" id="custom-color" placeholder="#123456 or #ff0000, #00ff00" 
-           style="width: 390px; height: 50px; font-size: 30px;">
-           <a href="Colours.png">
-Get HEX Code of Some Colours to Add in Custom Colour
-</a>
+        #backgroundBox {
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            background: #f4f4f4;
+        }
+
+        input {
+            width: 90%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        #customColorContainer {
+            display: none; /* Initially hidden */
+            margin-top: 10px;
+        }
+
+        #angleContainer {
+            display: none; /* Initially hidden */
+            margin-top: 10px;
+        }
+    </style>
+    <div id="backgroundBox">
+        <!-- Custom Color Input Box -->
+        <div id="customColorContainer">
+              <p style="color: black;">Enter a single HEX color or multiple HEX colors (comma-separated) for a gradient:</p>
+            <input type="text" id="colorInput" placeholder="Example: #ff5733 or #ff5733, #33ff57" oninput="toggleAngleSlider()">
+            
+            <!-- Angle Slider (only appears for gradients) -->
+            <div id="angleContainer">
+                <label for="angleSlider" style="color: black;">Angle: <span id="angleValue">45</span>°</label>
+                <input type="range" id="angleSlider" min="0" max="360" value="45" oninput="updateAngle(); changeBackground();">
+            </div>
+
+            <button onclick="changeBackground()">Set Background</button>
+            
+        </div>
 </div>
+    <script>
+        function toggleCustomColor() {
+            let select = document.getElementById("background-select");
+            let container = document.getElementById("customColorContainer");
+
+            // Show custom color container only when "Custom Color/Gradient" is selected
+            container.style.display = (select.value === "custom") ? "block" : "none";
+        }
+
+        function toggleAngleSlider() {
+            let colorInput = document.getElementById("colorInput").value.trim();
+            let colors = colorInput.split(",").map(color => color.trim());
+            
+            let angleContainer = document.getElementById("angleContainer");
+            
+            if (colors.length > 1) {
+                angleContainer.style.display = "block"; // Show slider if more than one color
+            } else {
+                angleContainer.style.display = "none"; // Hide slider if only one color
+            }
+        }
+
+        function updateAngle() {
+            document.getElementById("angleValue").innerText = document.getElementById("angleSlider").value;
+        }
+
+        function changeBackground() {
+            let colorInput = document.getElementById("colorInput").value.trim();
+            let colors = colorInput.split(",").map(color => color.trim());
+            let angle = document.getElementById("angleSlider").value; // Get selected angle
+
+            if (colors.length === 1) {
+                // Single color
+                document.body.style.background = colors[0];
+            } else {
+                // Gradient
+                document.body.style.background = `linear-gradient(${angle}deg, ${colors.join(", ")})`;
+            }
+        }
+    </script>
+
+
         <label>Theme:</label>
         <select id="theme-select">
             <option value="colorful-gradient" selected>Colorful Gradient</option>
@@ -225,7 +356,7 @@ Get HEX Code of Some Colours to Add in Custom Colour
     <label>Select Currency:</label>
     <select id="currency">
         <option value="INR">&#8377; INR</option>
-  <script></script>      <option value="USD">&#36; USD</option>
+   <option value="USD">&#36; USD</option>
         <option value="EUR">&#8364; EUR</option>
         <option value="GBP">&#163; GBP</option>
     </select>
@@ -242,56 +373,15 @@ Get HEX Code of Some Colours to Add in Custom Colour
     <!-- About App Popup -->
     <div id="about-popup" class="popup colorful-gradient-theme">
         <h2 style="font-size: 40px; margin-bottom: 10px;">About The Web App</h2>
-        <p class="creator-name" style="font-size: 30px; margin-bottom: 10px;"> THIS WEB APP IS CREATED BY PRIYANSHU DUTTA</p>
+        <p class="creator-name" style="font-size: 30px; margin-bottom: 10px;animation: 4s linear infinite;"> THIS WEB APP IS CREATED BY PRIYANSHU DUTTA</p>
         <p style="font-size: 28px; margin-bottom: 10px;color: black;">This web app is designed to provide an efficient and seamless money denomination breakdown experience.Whether you're organizing your funds or learning about various denominations,this app helps you with clear,quick breakdowns.</p>
   <!-- Version at the lower center -->
-        <p class="version">Version: <strong>1.3.0</strong></p>
+        <p class="version">Version: <strong>1.05.1</strong></p>
 
         <button id="close-about" style="padding: 16px 32px; font-size: 24px; background-color: #ff6b6b; color: white; border: none; border-radius: 5px; cursor: pointer; width: 100%; margin-top: 10px;">Close</button>
     </div>
 
     <script>
-    document.addEventListener("DOMContentLoaded", () => {
-  const bgStyleSelect = document.getElementById("background-style");
-  const customColorContainer = document.getElementById("custom-color-container");
-  const customColorInput = document.getElementById("custom-color");
-
-  // Retrieve saved settings from LocalStorage
-  const savedBg = localStorage.getItem("bgStyle");
-  const savedColor = localStorage.getItem("customColor");
-
-  if (savedBg) {
-    bgStyleSelect.value = savedBg;
-    if (savedBg === "custom") {
-      customColorContainer.style.display = "block"; // Show hex input field
-      if (savedColor) {
-        document.body.style.background = savedColor;
-        customColorInput.value = savedColor;
-      }
-    }
-  }
-
-  // Listen for background style change
-  bgStyleSelect.addEventListener("change", function() {
-    if (this.value === "custom") {
-      customColorContainer.style.display = "block"; // Show hex input field
-    } else {
-      customColorContainer.style.display = "none"; // Hide hex input field
-    }
-    localStorage.setItem("bgStyle", this.value);
-  });
-
-  // Listen for color input change
-  customColorInput.addEventListener("input", function() {
-    const color = this.value.trim();
-    if (/^#[0-9A-Fa-f]{6}$/.test(color)) {
-      document.body.style.background = color;
-      localStorage.setItem("customColor", color);
-    }
-  });
-});
-    
-    
     let menuButton = document.getElementById('menu-button');
         let menuPopup = document.getElementById('menu-popup');
         let settingsPopup = document.getElementById('settings-popup');
@@ -462,51 +552,29 @@ Get HEX Code of Some Colours to Add in Custom Colour
             font-weight: bold;
         }
     </style>
-    <script>
-        function calculateDenominations() {
-            var amount = parseInt(document.getElementById("amount").value);
-            if (isNaN(amount) || amount <= 0) {
-                document.getElementById("result").innerHTML = "Please enter a valid positive amount.";
-                return;
-            }
-
-            var denominations = [2000, 500, 200, 100, 50, 20, 10, 5, 2, 1];
-            var numNotes = Array(10).fill(0);
-
-            for (var i = 0; i < 10; i++) {
-                if (amount >= denominations[i]) {
-                    numNotes[i] = Math.floor(amount / denominations[i]);
-                    amount %= denominations[i];
-                }
-            }
-
-            var resultText = "<h3>Denominations breakdown:</h3><ul>";
-            for (var i = 0; i < 10; i++) {
-                if (numNotes[i] > 0) {
-                    resultText += "<li>" + denominations[i] + " : " + numNotes[i] + "</li>";
-                }
-            }
-            resultText += "</ul>";
-
-            document.getElementById("result").innerHTML = resultText;
-        }
-    </script>
+   
     <!-- What's New Popup -->
 <div id="whatsnew-popup" class="popup colorful-gradient-theme">
   <h2 style="font-size: 40px; margin-bottom: 10px;">What's New</h2>
-  <h3 style="font-size: 38px; margin-bottom: 20px; color: #808080;">Update v1.3.0</h3>
-  <ul style="font-size: 28px; margin-bottom: 20px;color:black;text-align:left;list-style-type: square">
-  <li>Added a feedback button in the three dots and a feedback ui to send feedback to the developer.
+  <h3 style="font-size: 38px; margin-bottom: 20px; color: #808080;">Update v1.05.1</h3>
+  <ul style="font-size: 24px; margin-bottom: 20px;color:black;text-align:left;list-style-type: square;">
+  <li>Added more background in background style such as Matrix Rain Background,Solar System Background, Colourful Gradient V2,Fireflies Background,Physics Particles Background.
 </li>
-<li>Added working animated background in background style.
+<li>Fixed a glitch in which Custom Colour/Gradient container is not showing when Custom Colour/Gradient is selected in background style and updated it.
 </li>
-<li>Added working history button with history ui in the menu button.
+<li>Updated buttons in MENU UI and added animated glowing hover effect.
 </li>
-<li>Fixed various bugs.
+<li>Added reaction emojis in place of numbers in rating in Feedback UI.
+</li>
+<li>Updated the What's New UI and added a proper background of the list.
+</li>
+<li>Updated History UI and changed the background.
+</li>
+<li>Fixed some minor bugs and glitches.
 </li>
 </ul>
   
-  <button id="close-whatsnew" style="padding: 16px 32px; font-size: 24px; background-color: #ff6b6b; color: white; border: none; border-radius: 5px; cursor: pointer; width: 100%; margin-top: 10px;">Close</button>
+  <button id="close-whatsnew" style="padding: 16px 32px; font-size: 24px; background-color: #ff6b6b; color: white; border: none; border-radius: 5px; cursor: pointer; width: 100%; margin-top: 10px;top:-40px;">Close</button>
 </div>
 <script>
   let whatsNewPopup = document.getElementById('whatsnew-popup');
@@ -587,7 +655,7 @@ document.addEventListener('click', function(event) {
 
     // Format the timestamp for India (DD-MM-YYYY_HH-MM-SS AM/PM)
     let options = { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true };
-    let formattedDate = now.toLocaleString("en-IN", options).replace(/\//g, "-").replace(",", "").replace(/:/g, "-");
+    let formattedDate = now.toLocaleString("en-IN", options).replace(/\ //g, "-").replace(",", "").replace(/:/g, "-");
 
     // Get the breakdown text
     let breakdownDiv = document.getElementById("result");
@@ -605,7 +673,7 @@ document.addEventListener('click', function(event) {
     let blob = new Blob([fullText], { type: "text/plain" });
     let a = document.createElement("a");
     a.href = URL.createObjectURL(blob);
-    a.download = `Denomination_Breakdown_${formattedDate}.txt`; // Filename with Indian format
+    a.download = `Denomination-Breakdown_${formattedDate}: ${formattedTime}.txt`; // Filename with Indian format
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
@@ -653,7 +721,9 @@ function calculateDenominations() {
     INR: { symbol: "&#8377;", denominations: [2000, 500, 200, 100, 50, 20, 10, 5, 2, 1] },
     USD: { symbol: "&#36;", denominations: [100, 50, 20, 10, 5, 2, 1] },
     EUR: { symbol: "&#8364;", denominations: [500, 200, 100, 50, 20, 10, 5, 2, 1] },
+    
     GBP: { symbol: "&#163;", denominations: [50, 20, 10, 5, 2, 1] }
+  
   };
 
   var selectedCurrency = currencyData[currency] || currencyData["INR"];
@@ -701,10 +771,10 @@ function calculateDenominations() {
   let iconImg = document.getElementById("currency-icon-img");
 
   if (version === "v1") {
-    iconLink.href = "Currency-converter v1.html";
-    iconImg.src = "Currency converter icon v1.png";
+    iconLink.href = "currency-converter v1.html";
+    iconImg.src = "currency converter icon v1.png";
   } else {
-    iconLink.href = "Currency-converter v2.html";
+    iconLink.href = "currency-converter v2.html";
     iconImg.src = "Currency-converter icon v2.png";
   }
 
@@ -731,22 +801,22 @@ function setBackground(style) {
   if (bgContainer) {
     bgContainer.remove();
   }
-
   if (style === "animated") {
     // Create an iframe for the animation
-    bgContainer = document.createElement("iframe");
-    bgContainer.id = "bg-container";
-    bgContainer.src = "bg animation.html"; // Path to your animation file
-    bgContainer.style.position = "fixed";
-    bgContainer.style.top = "0";
-    bgContainer.style.left = "0";
-    bgContainer.style.width = "100%";
-    bgContainer.style.height = "100%";
-    bgContainer.style.border = "none";
-    bgContainer.style.zIndex = "-100";
+    
+bgContainer = document.createElement("iframe");
+bgContainer.id = "bg-container";
+bgContainer.src = "bg animation.html"; // Path to your animation file
+bgContainer.style.position = "fixed";
+bgContainer.style.top = "0";
+bgContainer.style.left = "0";
+bgContainer.style.width = "100%";
+bgContainer.style.height = "100%";
+bgContainer.style.border = "none";
+bgContainer.style.zIndex = "-100";
 
-    document.body.prepend(bgContainer);
-  }
+document.body.prepend(bgContainer);
+}
 
   // Save background choice
   localStorage.setItem("backgroundStyle", style);
@@ -788,53 +858,6 @@ bgSelect.addEventListener("change", function() {
     <iframe id="feedbackFrame" src="" class="feedback-frame"></iframe>
   </div>
 </div>
-<style>
-  /* Glitch Effect */
-.glitch {
-    animation: glitch 0.3s infinite alternate;
-}
-
-@keyframes glitch {
-    0% { transform: skew(-5deg) rotate(-2deg); text-shadow: 3px 3px red; }
-    50% { transform: skew(5deg) rotate(2deg); text-shadow: -3px -3px blue; }
-    100% { transform: skew(-5deg) rotate(-2deg); text-shadow: 3px 3px green; }
-}
-
-/* Flip Mode */
-.flipped {
-    transform: rotate(180deg);
-}
-
-/* Neon Mode */
-.neon-mode {
-    background: black;
-    color: lime;
-    text-shadow: 0 0 5px lime, 0 0 10px lime;
-}
-
-/* Retro Mode */
-.retro-mode {
-    background: blue;
-    color: yellow;
-    font-family: "Courier New", monospace;
-}
-
-/* Rainbow Mode */
-.rainbow-mode {
-    animation: rainbow 1s infinite linear;
-}
-
-@keyframes rainbow {
-    0% { background: red; }
-    20% { background: orange; }
-    40% { background: yellow; }
-    60% { background: green; }
-    80% { background: blue; }
-    100% { background: purple; }
-}
-</style>
-
-
     <style>
         
         .history-ui {
@@ -868,7 +891,6 @@ bgSelect.addEventListener("change", function() {
             cursor: pointer;
             border-radius: 5px;
         }
-        
         .export-btn { background: green; color: white; }
         .history-btn { background: blue; color: white; }
     </style>
@@ -876,11 +898,11 @@ bgSelect.addEventListener("change", function() {
 
 
     <!-- History UI -->
-    <div id="historyUI" class="history-ui">
-        <h2>Your History</h2>
-        <div id="historyList" class="history-list"></div>
+    <div id="historyUI" class="popup colorful-gradient-theme">
+        <h2 style="color: darkolivegreen;">Your History</h2>
+        <div id="historyList" class="history-list" style="color: green;font-size: 20px;"></div>
         <button class="btn export-btn" onclick="exportHistory()">Export</button>
-        <button class="btn close-btn" onclick="closeHistory()">X</button>
+    <button id="btn close-btn" onclick="closeHistory()" style="padding: 16px 32px; font-size: 24px; background-color: #ff6b6b; color: white; border: none; border-radius: 5px; cursor: pointer; width: 100%; margin-top: 10px;top:20px;">Close</button>
     </div>
 
     <script>
@@ -899,8 +921,28 @@ bgSelect.addEventListener("change", function() {
             let formattedTime = timestamp.toLocaleString("en-US", { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true });
             let formattedDate = timestamp.toLocaleDateString();
             
-            let entry = `${formattedDate} - ${formattedTime} ➝ ${result}`;
-            history.push(entry);
+            let totalAmount = 0; // Initialize total amount
+let currencySymbol = ""; // Variable to store detected currency
+
+// Extract valid denomination pairs and detect currency
+let formattedBreakdown = result.match(/([^\d\s]+)?\d+\s*:\s*\d+/g)?.map(item => {
+  let parts = item.match(/([^\d\s]+)?(\d+)\s*:\s*(\d+)/); // Extract currency, denomination, and count
+  if (parts) {
+    let currency = parts[1] || ""; // Extract currency symbol (if exists)
+    let denomination = parseInt(parts[2]); // Extract denomination value
+    let count = parseInt(parts[3]); // Extract count
+
+    if (currency && !currencySymbol) currencySymbol = currency; // Store detected currency
+    totalAmount += denomination * count; // Calculate total amount
+    return `${denomination}x${count}`; // Format properly
+  }
+  return null;
+}).filter(Boolean).join("\n"); // Ensure proper line breaks
+
+// Format the history entry with explicit new lines
+let entry = `${formattedDate} - ${formattedTime}\n➝\n${formattedBreakdown}\nTotal: ${currencySymbol}${totalAmount}`;
+
+history.push(entry);
 
             if (history.length > 30) history.shift(); // Keep last 30 records
 
@@ -947,32 +989,165 @@ bgSelect.addEventListener("change", function() {
             let observer = new MutationObserver(saveBreakdownToHistory);
             observer.observe(document.getElementById("result"), { childList: true });
         });
+        </script>
         
-        let deferredPrompt;
 
-window.addEventListener("beforeinstallprompt", (event) => {
-  event.preventDefault();
-  deferredPrompt = event;
-  document.getElementById("install-button").style.display = "block";
-});
+  
 
-document.getElementById("install-button").addEventListener("click", async () => {
-  if (deferredPrompt) {
-    deferredPrompt.prompt();
-    const choiceResult = await deferredPrompt.userChoice;
-    if (choiceResult.outcome === "accepted") {
-      console.log("User accepted the install prompt");
-    } else {
-      console.log("User dismissed the install prompt");
-    }
-    deferredPrompt = null;
-  }
-});window.addEventListener("appinstalled", () => {
-  document.getElementById("install-button").style.display = "none";
+    <script>
+        // Change the background animation based on user selection
+        document.getElementById("background-select").addEventListener("change", function() {
+            let selectedStyle = this.value;
+            let iframe = document.getElementById("background-frame");
+
+            if (selectedStyle === "matrix") {
+                iframe.src = "matrix rain.html"; // Load Matrix Rain animation
+            } else if (selectedStyle === "solarsystem") {
+                iframe.src = "Solar system.html"; // Load Floating Bubbles animation
+            } else if (selectedStyle === "fireflies") {
+                iframe.src = "fireflies.html"; // Load Fireflies animation
+            } else if (selectedStyle === "colourful-gradient-v2") {
+            iframe.src = "colourful gradient v2.html"; // Load Fireflies animation
+            } else if (selectedStyle === "physics-particles") {
+             iframe.src = "Physics Particles.html"; // Load physics particles animation
+            }else {
+                iframe.src = "about:blank"; // Remove animation
+            }
+        });
+        
+
+
+        let lastX = 0, lastY = 0, moveCount = 0;
+        let shakeThreshold = 10; // Sensitivity
+
+        document.addEventListener("touchmove", (event) => {
+            if (event.touches.length > 0) {
+                let touch = event.touches[0];
+                let deltaX = Math.abs(touch.clientX - lastX);
+                let deltaY = Math.abs(touch.clientY - lastY);
+
+                if (deltaX > shakeThreshold || deltaY > shakeThreshold) {
+                    moveCount++;
+                }
+
+                if (moveCount > 5) { // If detected multiple quick moves
+                    document.body.style.backgroundColor = getRandomColor();
+                    moveCount = 0; // Reset counter after shake
+                }
+
+                lastX = touch.clientX;
+                lastY = touch.clientY;
+            }
+        });
+
+        function getRandomColor() {
+            return `hsl(${Math.random() * 360}, 100%, 75%)`;
+        }
+        
+        
+
+
+document.addEventListener("DOMContentLoaded", function() {
+  const popup = document.getElementById("whatsnew-popup"); // Change this to your actual pop-up ID
+  const whatsNewButton = document.getElementById("WhatsNewbtn"); // Change this to your actual button ID
+  const closeButton = document.getElementById("close-whatsnew"); // Change this to your close button ID
+
+  // Ensure pop-up is hidden on page load
+  popup.style.display = "none";
+
+  // Show the pop-up only when the "What's New" button is clicked
+  WhatsNewbtn.addEventListener("click", function() {
+    popup.style.display = "block";
+  });
+
+  // Close the pop-up when the close button is clicked
+  close-whatsnew.addEventListener("click", function() {
+    popup.style.display = "none";
+  });
 });
     </script>
+        <style>
+        
+ .popup button {
+  width: 100%;
+  padding: 20px;
+  margin: 5px 0;
+  padding: 15px 40px;
+  border: none;
+  outline: none;
+  color: #FFF;
+  cursor: pointer;
+  position: relative;
+  z-index: 0;
+  border-radius: 12px;
+}
+.popup button::after {
+  content: "";
+  z-index: -1;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-color: #red;
+  left: 0;
+  top: 0;
+  border-radius: 10px;
+}
+/* glow */
+.popup button::before {
+  content: "";
+  background: linear-gradient(
+    45deg,
+    #FF0000, #FF7300, #FFFB00, #48FF00,
+    #00FFD5, #002BFF, #FF00C8, #FF0000
+  );
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  background-size: 600%;
+  z-index: -1;
+  width: calc(100% + 4px);
+  height:  calc(100% + 4px);
+  filter: blur(8px);
+  animation: glowing 20s linear infinite;
+  transition: opacity .3s ease-in-out;
+  border-radius: 10px;
+  opacity: 0;
+}
 
+@keyframes glowing {
+  0% {background-position: 0 0;}
+  50% {background-position: 400% 0;}
+  100% {background-position: 0 0;}
+}
 
+/* hover */
+.popup button:hover::before {
+  opacity: 1;
+}
 
+.popup button:active:after {
+  background: transparent;
+}
+
+.popup button:active {
+  color: #000;
+  font-weight: bold;
+}
+
+  /* Make iframe cover the entire screen */
+  #background-frame {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    border: none;
+    z-index: -1;
+    /* Keeps it behind everything */
+  }
+
+  </style>
+ <!-- Fullscreen Background Iframe-->
+  <iframe id="background-frame" src="about:blank"></iframe>
 </body>
 </html>

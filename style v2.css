@@ -13,9 +13,6 @@ body{
   min-height: 100vh;
   padding: 0 10px;
   background-image: linear-gradient(to right, #00b4db, #0083b0);
-    min-width: 1024px; /* Ensures desktop width */
-    overflow-x: auto;  /* Prevents mobile scaling */
-
 
 
 }
@@ -164,10 +161,6 @@ form button:hover{
 
    margin-bottom: 10px;
  }
- body {
-    min-width: 1024px; /* Ensures desktop width */
-    overflow-x: auto;  /* Prevents mobile scaling */
-}
  /* Position the icon in the top-right corner */
  .icon-container {
    position: absolute;

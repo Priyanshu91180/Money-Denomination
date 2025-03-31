@@ -12,25 +12,480 @@
 		<i style="--clr:#00ff0a;"></i>
 		<i style="--clr:#ff0057;"></i>
 		<i style="--clr:#fffd44;"></i>
+</div>
 		<div class="login">
-			<h2>Feedback Form</h2>
-			<form action="https://getform.io/f/axowymqb" method="POST">
+			<h2>Give Your</h2><h2>Feedback</h2>
+			 <h2>To The Developer</h2>
+					  <form action="https://api.web3forms.com/submit" method="POST">
+
+			    <!-- Replace with your Access Key -->
+			    <input type="hidden" name="access_key" value="49b4d37f-76f3-4ca4-a2f7-640900bb272d">
+			<!-- Custom Subject Line -->
+     <input type="hidden" name="subject" value="" id="subject">
 			<div class="inputBx">
-				<input type="text" placeholder="Your Name" required name="Your Name">
+				<input type="text" id="name" placeholder="Your Name" required name="Your Name">
 			</div>
 			<div class="inputBx">
-				<input type="email" placeholder="Your Email" required name="Email">
+				<input type="text" placeholder="Your Email or Phone No. (+91 9876406990)" required name="Email or Phone Number">
 			</div>
 			<div class="inputBx"> 
  	   <input type="feedback" placeholder="Your Feedback" required name="Feedback">
 	    </div>
-	    <label class="rating" name="Rating:">Rating:</label>
-	    <select placeholder="Rating:" name="Rating"><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option></select><br><br>
-	    <input type="hidden" name="_gotcha" style="display:none !important"> 
+	    <label class="rating">Rating:</label>
+	    <!-- partial:index.partial.html -->
+<div class="rating">
+  <label class="angry">
+    <input type="radio" value="😡 1" name="Rating:" >
+    <div>
+      <svg class="eye left">
+        <use xlink:href="#eye">
+      </svg>
+      <svg class="eye right">
+        <use xlink:href="#eye">
+      </svg>
+      <svg class="mouth">
+        <use xlink:href="#mouth">
+      </svg>
+    </div>
+  </label>
+  <label class="sad">
+    <input type="radio" value="😞 2""" name="Rating:">
+    <div>
+      <svg class="eye left">
+        <use xlink:href="#eye">
+      </svg>
+      <svg class="eye right">
+        <use xlink:href="#eye">
+      </svg>
+      <svg class="mouth">
+        <use xlink:href="#mouth">
+      </svg>
+    </div>
+  </label>
+  <label class="ok">
+    <input type="radio" value="☹️ 3" name="Rating:">
+    <div></div>
+  </label>
+  <label class="good">
+    <input type="radio" value="🙂 4" name="Rating:" checked >
+    <div>
+      <svg class="eye left">
+        <use xlink:href="#eye">
+      </svg>
+      <svg class="eye right">
+        <use xlink:href="#eye">
+      </svg>
+      <svg class="mouth">
+        <use xlink:href="#mouth">
+      </svg>
+    </div>
+  </label>
+  <label class="happy">
+    <input type="radio" value="😃 5" name="Rating:" >
+    <div>
+      <svg class="eye left">
+        <use xlink:href="#eye">
+      </svg>
+      <svg class="eye right">
+        <use xlink:href="#eye">
+      </svg>
+    </div>
+  </label>
+</div>
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol xmlns="http://www.w3.org/2000/svg" viewBox="0 0 7 4" id="eye">
+    <path d="M1,1 C1.83333333,2.16666667 2.66666667,2.75 3.5,2.75 C4.33333333,2.75 5.16666667,2.16666667 6,1"></path>
+  </symbol>
+  <symbol xmlns="http://www.w3.org/2000/svg" viewBox="0 0 18 7" id="mouth">
+    <path d="M1,5.5 C3.66666667,2.5 6.33333333,1 9,1 C11.6666667,1 14.3333333,2.5 17,5.5"></path>
+  </symbol>
+</svg>
+	    <input type="hidden" name="" style="display:none !important"> 
 			<div class="inputBx">
 				<input type="submit" value="Submit">
 			</div>
 		</div>
 	</div>
+	<style>
+	  .rating {
+  --normal: #414052;
+  --normal-shadow: #313140;
+  --normal-shadow-top: #4c4b60;
+  --normal-mouth: #2e2e3d;
+  --normal-eye: #282734;
+  --active: #f8da69;
+  --active-shadow: #f4b555;
+  --active-shadow-top: #fff6d3;
+  --active-mouth: #f05136;
+  --active-eye: #313036;
+  --active-tear: #76b5e7;
+  --active-shadow-angry: #e94f1d;
+  --hover: #454456;
+  --hover-shadow-top: #59586b;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+}
+.rating label {
+  position: relative;
+  transition: transform 0.3s;
+  cursor: pointer;
+}
+.rating label:not(:last-child) {
+  margin-right: 20px;
+}
+.rating label input {
+  -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none;
+  outline: none;
+  border: none;
+  display: block;
+  position: absolute;
+  width: 40px;
+  height: 40px;
+  left: 0;
+  top: 0;
+  margin: 0;
+  padding: 0;
+  border-radius: 50%;
+  background: var(--sb, var(--normal));
+  box-shadow: inset 3px -3px 4px var(--sh, var(--normal-shadow)), inset -1px 1px 2px var(--sht, var(--normal-shadow-top));
+  transition: background 0.4s, box-shadow 0.4s, transform 0.3s;
+  -webkit-tap-highlight-color: transparent;
+}
+.rating label div {
+  width: 40px;
+  height: 40px;
+  position: relative;
+  transform: perspective(240px) translateZ(4px);
+}
+.rating label div svg, .rating label div:before, .rating label div:after {
+  display: block;
+  position: absolute;
+  left: var(--l, 9px);
+  top: var(--t, 13px);
+  width: var(--w, 8px);
+  height: var(--h, 1px);
+  transform: rotate(var(--r, 0deg)) scale(var(--sc, 1)) translateZ(0);
+}
+.rating label div svg {
+  fill: none;
+  stroke: var(--s);
+  stroke-width: 1.5px;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  transition: stroke 0.4s;
+}
+.rating label div svg.eye {
+  --s: var(--e, var(--normal-eye));
+  --t: 17px;
+  --w: 7px;
+  --h: 4px;
+}
+.rating label div svg.eye.right {
+  --l: 23px;
+}
+.rating label div svg.mouth {
+  --s: var(--m, var(--normal-mouth));
+  --l: 11px;
+  --t: 23px;
+  --w: 18px;
+  --h: 7px;
+}
+.rating label div:before, .rating label div:after {
+  content: "";
+  z-index: var(--zi, 1);
+  border-radius: var(--br, 1px);
+  background: var(--b, var(--e, var(--normal-eye)));
+  transition: background 0.4s;
+}
+.rating label.angry {
+  --step-1-rx: -24deg;
+  --step-1-ry: 20deg;
+  --step-2-rx: -24deg;
+  --step-2-ry: -20deg;
+}
+.rating label.angry div:before {
+  --r: 20deg;
+}
+.rating label.angry div:after {
+  --l: 23px;
+  --r: -20deg;
+}
+.rating label.angry div svg.eye {
+  stroke-dasharray: 4.55;
+  stroke-dashoffset: 8.15;
+}
+.rating label.angry input:checked {
+  -webkit-animation: angry 1s linear;
+          animation: angry 1s linear;
+}
+.rating label.angry input:checked + div:before {
+  --middle-y: -2px;
+  --middle-r: 22deg;
+  -webkit-animation: toggle 0.8s linear forwards;
+          animation: toggle 0.8s linear forwards;
+}
+.rating label.angry input:checked + div:after {
+  --middle-y: 1px;
+  --middle-r: -18deg;
+  -webkit-animation: toggle 0.8s linear forwards;
+          animation: toggle 0.8s linear forwards;
+}
+.rating label.sad {
+  --step-1-rx: 20deg;
+  --step-1-ry: -12deg;
+  --step-2-rx: -18deg;
+  --step-2-ry: 14deg;
+}
+.rating label.sad div:before, .rating label.sad div:after {
+  --b: var(--active-tear);
+  --sc: 0;
+  --w: 5px;
+  --h: 5px;
+  --t: 15px;
+  --br: 50%;
+}
+.rating label.sad div:after {
+  --l: 25px;
+}
+.rating label.sad div svg.eye {
+  --t: 16px;
+}
+.rating label.sad div svg.mouth {
+  --t: 24px;
+  stroke-dasharray: 9.5;
+  stroke-dashoffset: 33.25;
+}
+.rating label.sad input:checked + div:before, .rating label.sad input:checked + div:after {
+  -webkit-animation: tear 0.6s linear forwards;
+          animation: tear 0.6s linear forwards;
+}
+.rating label.ok {
+  --step-1-rx: 4deg;
+  --step-1-ry: -22deg;
+  --step-1-rz: 6deg;
+  --step-2-rx: 4deg;
+  --step-2-ry: 22deg;
+  --step-2-rz: -6deg;
+}
+.rating label.ok div:before {
+  --l: 12px;
+  --t: 17px;
+  --h: 4px;
+  --w: 4px;
+  --br: 50%;
+  box-shadow: 12px 0 0 var(--e, var(--normal-eye));
+}
+.rating label.ok div:after {
+  --l: 13px;
+  --t: 26px;
+  --w: 14px;
+  --h: 2px;
+  --br: 1px;
+  --b: var(--m, var(--normal-mouth));
+}
+.rating label.ok input:checked + div:before {
+  --middle-s-y: 0.35;
+  -webkit-animation: toggle 0.2s linear forwards;
+          animation: toggle 0.2s linear forwards;
+}
+.rating label.ok input:checked + div:after {
+  --middle-s-x: 0.5;
+  -webkit-animation: toggle 0.7s linear forwards;
+          animation: toggle 0.7s linear forwards;
+}
+.rating label.good {
+  --step-1-rx: -14deg;
+  --step-1-rz: 10deg;
+  --step-2-rx: 10deg;
+  --step-2-rz: -8deg;
+}
+.rating label.good div:before {
+  --b: var(--m, var(--normal-mouth));
+  --w: 5px;
+  --h: 5px;
+  --br: 50%;
+  --t: 22px;
+  --zi: 0;
+  opacity: 0.5;
+  box-shadow: 16px 0 0 var(--b);
+  filter: blur(2px);
+}
+.rating label.good div:after {
+  --sc: 0;
+}
+.rating label.good div svg.eye {
+  --t: 15px;
+  --sc: -1;
+  stroke-dasharray: 4.55;
+  stroke-dashoffset: 8.15;
+}
+.rating label.good div svg.mouth {
+  --t: 22px;
+  --sc: -1;
+  stroke-dasharray: 13.3;
+  stroke-dashoffset: 23.75;
+}
+.rating label.good input:checked + div svg.mouth {
+  --middle-y: 1px;
+  --middle-s: -1;
+  -webkit-animation: toggle 0.8s linear forwards;
+          animation: toggle 0.8s linear forwards;
+}
+.rating label.happy div {
+  --step-1-rx: 18deg;
+  --step-1-ry: 24deg;
+  --step-2-rx: 18deg;
+  --step-2-ry: -24deg;
+}
+.rating label.happy div:before {
+  --sc: 0;
+}
+.rating label.happy div:after {
+  --b: var(--m, var(--normal-mouth));
+  --l: 11px;
+  --t: 23px;
+  --w: 18px;
+  --h: 8px;
+  --br: 0 0 8px 8px;
+}
+.rating label.happy div svg.eye {
+  --t: 14px;
+  --sc: -1;
+}
+.rating label.happy input:checked + div:after {
+  --middle-s-x: 0.95;
+  --middle-s-y: 0.75;
+  -webkit-animation: toggle 0.8s linear forwards;
+          animation: toggle 0.8s linear forwards;
+}
+.rating label input:checked {
+  --sb: var(--active);
+  --sh: var(--active-shadow);
+  --sht: var(--active-shadow-top);
+}
+.rating label input:checked + div {
+  --m: var(--active-mouth);
+  --e: var(--active-eye);
+  -webkit-animation: shake 0.8s linear forwards;
+          animation: shake 0.8s linear forwards;
+}
+.rating label input:not(:checked):hover {
+  --sb: var(--hover);
+  --sht: var(--hover-shadow-top);
+}
+.rating label input:not(:checked):active {
+  transform: scale(0.925);
+}
+.rating label input:not(:checked):active + div {
+  transform: scale(0.925);
+}
+.rating label:hover {
+  transform: scale(1.08);
+}
+
+@-webkit-keyframes shake {
+  30% {
+    transform: perspective(240px) rotateX(var(--step-1-rx, 0deg)) rotateY(var(--step-1-ry, 0deg)) rotateZ(var(--step-1-rz, 0deg)) translateZ(10px);
+  }
+  60% {
+    transform: perspective(240px) rotateX(var(--step-2-rx, 0deg)) rotateY(var(--step-2-ry, 0deg)) rotateZ(var(--step-2-rz, 0deg)) translateZ(10px);
+  }
+  100% {
+    transform: perspective(240px) translateZ(4px);
+  }
+}
+
+@keyframes shake {
+  30% {
+    transform: perspective(240px) rotateX(var(--step-1-rx, 0deg)) rotateY(var(--step-1-ry, 0deg)) rotateZ(var(--step-1-rz, 0deg)) translateZ(10px);
+  }
+  60% {
+    transform: perspective(240px) rotateX(var(--step-2-rx, 0deg)) rotateY(var(--step-2-ry, 0deg)) rotateZ(var(--step-2-rz, 0deg)) translateZ(10px);
+  }
+  100% {
+    transform: perspective(240px) translateZ(4px);
+  }
+}
+@-webkit-keyframes tear {
+  0% {
+    opacity: 0;
+    transform: translateY(-2px) scale(0) translateZ(0);
+  }
+  50% {
+    transform: translateY(12px) scale(0.6, 1.2) translateZ(0);
+  }
+  20%, 80% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(24px) translateX(4px) rotateZ(-30deg) scale(0.7, 1.1) translateZ(0);
+  }
+}
+@keyframes tear {
+  0% {
+    opacity: 0;
+    transform: translateY(-2px) scale(0) translateZ(0);
+  }
+  50% {
+    transform: translateY(12px) scale(0.6, 1.2) translateZ(0);
+  }
+  20%, 80% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(24px) translateX(4px) rotateZ(-30deg) scale(0.7, 1.1) translateZ(0);
+  }
+}
+@-webkit-keyframes toggle {
+  50% {
+    transform: translateY(var(--middle-y, 0)) scale(var(--middle-s-x, var(--middle-s, 1)), var(--middle-s-y, var(--middle-s, 1))) rotate(var(--middle-r, 0deg));
+  }
+}
+@keyframes toggle {
+  50% {
+    transform: translateY(var(--middle-y, 0)) scale(var(--middle-s-x, var(--middle-s, 1)), var(--middle-s-y, var(--middle-s, 1))) rotate(var(--middle-r, 0deg));
+  }
+}
+@-webkit-keyframes angry {
+  40% {
+    background: var(--active);
+  }
+  45% {
+    box-shadow: inset 3px -3px 4px var(--active-shadow), inset 0 8px 10px var(--active-shadow-angry);
+  }
+}
+@keyframes angry {
+  40% {
+    background: var(--active);
+  }
+  45% {
+    box-shadow: inset 3px -3px 4px var(--active-shadow), inset 0 8px 10px var(--active-shadow-angry);
+  }
+}
+html {
+  box-sizing: border-box;
+  -webkit-font-smoothing: antialiased;
+}
+
+* {
+  box-sizing: inherit;
+}
+*:before, *:after {
+  box-sizing: inherit;
+}
+	</style>
+	<script>
+	  document.getElementById("feedback").addEventListener("submit", function() {
+	    let name = document.getElementById("name").value;
+	    document.getElementById("subject").value = name + " shared his feedback.";
+	  });
+	</script>
 </body>
 </html>

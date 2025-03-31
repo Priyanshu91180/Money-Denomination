@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fireflies Animation</title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+            background: black;
+        }
+
+        .firefly {
+            position: absolute;
+            width: 5px;
+            height: 5px;
+            background: yellow;
+            border-radius: 50%;
+            opacity: 0.8;
+            animation: moveFirefly 5s infinite alternate ease-in-out;
+        }
+
+        @keyframes moveFirefly {
+            0% { transform: translate(0, 0); opacity: 0.8; }
+            50% { opacity: 1; }
+            100% { transform: translate(var(--x), var(--y)); opacity: 0; }
+        }
+    </style>
+</head>
+<body>
+    <script>
+        function createFireflies() {
+            for (let i = 0; i < 20; i++) {
+                let firefly = document.createElement("div");
+                firefly.classList.add("firefly");
+                document.body.appendChild(firefly);
+
+                let x = Math.random() * window.innerWidth;
+                let y = Math.random() * window.innerHeight;
+                let duration = Math.random() * 5 + 3;
+
+                firefly.style.left = `${x}px`;
+                firefly.style.top = `${y}px`;
+                firefly.style.animationDuration = `${duration}s`;
+                firefly.style.setProperty("--x", `${Math.random() * 200 - 100}px`);
+                firefly.style.setProperty("--y", `${Math.random() * 200 - 100}px`);
+            }
+        }
+
+        createFireflies();
+    </script>
+</body>
+</html>

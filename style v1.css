@@ -9,8 +9,6 @@ body {
   align-items: center;
   min-height: 100vh;
   background-color: #feece2;
-    min-width: 1024px; /* Ensures desktop width */
-    overflow-x: auto;  /* Prevents mobile scaling */
 }
 
 .container {
